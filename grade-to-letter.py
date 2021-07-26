@@ -46,54 +46,39 @@ Takes up to 3 arguments
 	total: changes functionality to # correct out of 'total'
 	gradeNS: user provided JSON object to change the default scoring
 		- keys must use double quotes
-		- e.g. '{"aHigh": 50, "aLow": 20, ... }'
+		- e.g. ... 10 10 '{"aHigh": 50, "aLow": 20, ... }'
 '''
 def handleInput():
-	if len(sys.argv) > 1:
-		parseGradeNS = {}
-		if len(sys.argv) > 3:
-			try:
-				parseGradeNS = json.loads(
-					sys.argv[3],
-					object_hook=lambda d: SimpleNamespace(**d)
-				)
-				print(parseGradeNS)
-			except Exception as e:
-				print("Error processing provided grading NS")
-				print(f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e}")
-				return
-				
-		gradeToLetter(
-			int(sys.argv[1]),
-			int(sys.argv[2]) if len(sys.argv) > 2 else False,
-			parseGradeNS if len(sys.argv) > 3 else gradeNS
-		)
-	else:
-		userBaseVal = input("What's the grade / value? ")
-		if not bool(userBaseVal):
-			print('Must provide a grade / val')
+	try:
+		userBaseVal = int(sys.argv[1]) if len(sys.argv) > 1 else int(input("What's the grade / value? "))
+	except Exception as e:
+		print(e)
+		return
+
+	try:
+		totalValInput = sys.argv[2] if len(sys.argv) > 2 else input("Opt: Total points? ")
+		userTotalVal = int(totalValInput) if bool(totalValInput) else False
+	except Exception as e:
+		print(e)
+		return
+
+	userGradeNS = sys.argv[3] if len(sys.argv) > 3 else input("Opt: Custom grading?\n")
+	if len(userGradeNS):
+		try:
+			parseGradeNS = json.loads(
+				userGradeNS,
+				object_hook=lambda d: SimpleNamespace(**d)
+			)
+		except json.decoder.JSONDecodeError as e:
+			print("Does the provided object starts with quotes? eg: '{...}' ")
+			print(f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e}")
 			return
-		
-		userTotalVal = input("Opt: Total points ")
-		userGradeNS = input("Opt: Custom grading NSionary")
 
-		print(userGradeNS)
-		if bool(userGradeNS):
-			parseGradeNS = {}
-			try:
-				parseGradeNS = json.loads(
-					userGradeNS,
-					object_hook=lambda d: SimpleNamespace(**d)
-				)
-			except:
-				print("Error processing provided grading NS")
-				
-
-		gradeToLetter(
-			int(float(userBaseVal)),
-			int(float(userTotalVal)) if bool(userTotalVal) else False,
-			parseGradeNS if bool(parseGradeNS) else gradeNS
-		)
+	gradeToLetter(
+		userBaseVal,
+		userTotalVal,
+		parseGradeNS if bool(userGradeNS) else gradeNS
+	)
 
 handleInput()
 
