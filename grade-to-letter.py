@@ -40,15 +40,15 @@ def gradeToLetter(val, total, gradeNS):
 	else:
 		print('invalid value')
 
-'''
-Takes up to 3 arguments
-	val: value as percentage correct
-	total: changes functionality to # correct out of 'total'
-	gradeNS: user provided JSON object to change the default scoring
-		- keys must use double quotes
-		- e.g. ... 10 10 '{"aHigh": 50, "aLow": 20, ... }'
-'''
 def handleInput():
+	'''
+	Takes up to 3 arguments
+		val: value as percentage correct
+		total: changes functionality to # correct out of 'total'
+		gradeNS: user provided JSON object to change the default scoring
+			- keys must use double quotes
+			- e.g. ... 10 10 '{"aHigh": 50, "aLow": 20, ... }'
+	'''
 	try:
 		userBaseVal = int(sys.argv[1]) if len(sys.argv) > 1 else int(input("What's the grade / value? "))
 	except Exception as e:
