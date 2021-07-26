@@ -70,7 +70,7 @@ def handleInput():
 				object_hook=lambda d: SimpleNamespace(**d)
 			)
 		except json.decoder.JSONDecodeError as e:
-			print("Does the provided object starts with quotes? eg: '{...}' ")
+			print("Does the provided object start with quotes? eg: '{...}' ")
 			print(f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e}")
 			return
 
