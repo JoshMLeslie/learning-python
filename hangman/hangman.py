@@ -16,8 +16,6 @@ def startGame(word: str, lives: int):
 		else:
 			wordFiller.append('-')
 
-	print(word)
-
 	while correctLetters < len(word) and lives > 0:
 		print(f'Your word: {" ".join(wordFiller)}')
 		guess = input('Guess a letter!\n')
